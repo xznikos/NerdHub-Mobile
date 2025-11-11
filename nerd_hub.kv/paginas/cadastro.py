@@ -34,7 +34,7 @@ class CadastroScreen(Screen):
         self.ids.email_input.text = ""
         self.ids.senha_input.text = ""
 
-    def ir_para_login(self, dt):
+    def ir_para_login(self, *args):
         self.manager.current = "login"
 
     def voltar(self):
