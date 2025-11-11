@@ -1,0 +1,344 @@
+#:import dp kivy.metrics.dp
+
+<ImageButton@ButtonBehavior+Image>:
+    allow_stretch: True
+    keep_ratio: False
+
+<CadastroScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.95, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 0
+        spacing: 0
+
+        # HEADER IGUAL AO DA HOME E LOGIN
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: dp(10), 0
+            spacing: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 0.07, 0.57, 0.38, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            # BOTÃO NERD HUB (VOLTA PARA HOME)
+            Button:
+                text: "NERD HUB"
+                size_hint_x: None
+                width: dp(120)
+                background_normal: ''
+                background_color: 0, 0, 0, 0  # Transparente
+                color: 1, 1, 1, 1
+                font_size: '18sp'
+                bold: True
+                on_release:
+                    app.root.transition.direction = "right"
+                    app.root.current = "home"
+
+            TextInput:
+                hint_text: "Buscar..."
+                multiline: False
+                background_normal: ''
+                background_active: ''
+                background_color: 1,1,1,1
+                foreground_color: 0,0,0,1
+                font_size: '14sp'
+                size_hint_x: 1.5
+                size_hint_y: None
+                height: dp(36)
+                padding: [dp(12), dp(10)]
+                radius: [dp(8),]
+                pos_hint: {'center_y': 0.5}
+
+            BoxLayout:
+                size_hint_x: None
+                width: dp(80)
+                spacing: dp(10)
+                padding: 0, dp(12)
+
+                ImageButton:
+                    source: 'nerd_hub.kv/imagens/imagens_home/carrinho.png'
+                    size_hint: None, None
+                    width: dp(25)
+                    height: dp(25)
+                    on_release:
+                        app.root.mudar_tela_com_login("carrinho")
+
+                ImageButton:
+                    source: 'nerd_hub.kv/imagens/imagens_home/perfil.png'
+                    size_hint: None, None
+                    width: dp(25)
+                    height: dp(25)
+                    on_release:
+                        app.root.mudar_tela("login")
+
+        # CONTEÚDO PRINCIPAL
+        ScrollView:
+            do_scroll_x: False
+            bar_width: dp(4)
+            bar_color: 0.07, 0.57, 0.38, 0.7
+            bar_inactive_color: 0.07, 0.57, 0.38, 0.3
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(30), dp(20)
+                spacing: dp(25)
+
+                # TÍTULO E SUBTÍTULO
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(80)
+                    spacing: dp(5)
+
+                    Label:
+                        text: "Criar sua conta"
+                        font_size: '24sp'
+                        bold: True
+                        color: 0.07, 0.57, 0.38, 1
+                        size_hint_y: None
+                        height: dp(35)
+                        halign: 'center'
+                        valign: 'middle'
+                        text_size: self.size
+
+                    Label:
+                        text: "Preencha seus dados para começar"
+                        font_size: '16sp'
+                        color: 0.4, 0.4, 0.4, 1
+                        size_hint_y: None
+                        height: dp(25)
+                        halign: 'center'
+                        valign: 'middle'
+                        text_size: self.size
+
+                # CARD DE CADASTRO
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(400)
+                    padding: dp(25), dp(20)
+                    spacing: dp(15)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(16),]
+                        Color:
+                            rgba: 0.95, 0.95, 0.95, 1
+                        Line:
+                            rounded_rectangle: [self.x, self.y, self.width, self.height, dp(16)]
+                            width: dp(1.5)
+
+                    # Campo Nome
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(70)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Nome completo"
+                            font_size: '14sp'
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_y: None
+                            height: dp(20)
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                        TextInput:
+                            id: nome_input
+                            hint_text: "Seu nome completo"
+                            multiline: False
+                            size_hint_y: None
+                            height: dp(45)
+                            font_size: '16sp'
+                            padding: [dp(12), dp(10)]
+                            background_normal: ''
+                            background_active: ''
+                            background_color: 0.98, 0.98, 0.98, 1
+                            foreground_color: 0.1, 0.1, 0.1, 1
+                            cursor_color: 0.07, 0.57, 0.38, 1
+                            canvas.before:
+                                Color:
+                                    rgba: 0.8, 0.8, 0.8, 1
+                                Line:
+                                    rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                    width: dp(1.2)
+
+                    # Campo Email
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(70)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "E-mail"
+                            font_size: '14sp'
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_y: None
+                            height: dp(20)
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                        TextInput:
+                            id: email_input
+                            hint_text: "seu@email.com"
+                            multiline: False
+                            size_hint_y: None
+                            height: dp(45)
+                            font_size: '16sp'
+                            padding: [dp(12), dp(10)]
+                            background_normal: ''
+                            background_active: ''
+                            background_color: 0.98, 0.98, 0.98, 1
+                            foreground_color: 0.1, 0.1, 0.1, 1
+                            cursor_color: 0.07, 0.57, 0.38, 1
+                            canvas.before:
+                                Color:
+                                    rgba: 0.8, 0.8, 0.8, 1
+                                Line:
+                                    rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                    width: dp(1.2)
+
+                    # Campo Senha
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(70)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Senha"
+                            font_size: '14sp'
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_y: None
+                            height: dp(20)
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                        TextInput:
+                            id: senha_input
+                            hint_text: "Crie uma senha"
+                            password: True
+                            multiline: False
+                            size_hint_y: None
+                            height: dp(45)
+                            font_size: '16sp'
+                            padding: [dp(12), dp(10)]
+                            background_normal: ''
+                            background_active: ''
+                            background_color: 0.98, 0.98, 0.98, 1
+                            foreground_color: 0.1, 0.1, 0.1, 1
+                            cursor_color: 0.07, 0.57, 0.38, 1
+                            canvas.before:
+                                Color:
+                                    rgba: 0.8, 0.8, 0.8, 1
+                                Line:
+                                    rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                    width: dp(1.2)
+
+                    # Dica da Senha
+                    Label:
+                        text: "Use pelo menos 6 caracteres"
+                        font_size: '12sp'
+                        color: 0.6, 0.6, 0.6, 1
+                        size_hint_y: None
+                        height: dp(20)
+                        halign: 'left'
+                        valign: 'middle'
+                        text_size: self.size
+
+                    # Botão Cadastrar
+                    Button:
+                        text: "CRIAR CONTA"
+                        size_hint_y: None
+                        height: dp(50)
+                        background_normal: ''
+                        background_color: 0.07, 0.57, 0.38, 1
+                        color: 1, 1, 1, 1
+                        font_size: '16sp'
+                        bold: True
+                        radius: [dp(10),]
+                        on_release: root.realizar_cadastro()
+
+                # SEPARADOR
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: dp(20)
+                    spacing: dp(10)
+
+                    Widget:
+                        canvas.before:
+                            Color:
+                                rgba: 0.8, 0.8, 0.8, 1
+                            Rectangle:
+                                pos: self.center_x - dp(40), self.center_y
+                                size: dp(80), dp(1)
+
+                    Label:
+                        text: "já tem conta?"
+                        font_size: '14sp'
+                        color: 0.6, 0.6, 0.6, 1
+                        size_hint_x: None
+                        width: dp(100)
+                        halign: 'center'
+                        valign: 'middle'
+                        text_size: self.size
+
+                    Widget:
+                        canvas.before:
+                            Color:
+                                rgba: 0.8, 0.8, 0.8, 1
+                            Rectangle:
+                                pos: self.center_x - dp(40), self.center_y
+                                size: dp(80), dp(1)
+
+                # Botão Fazer Login
+                Button:
+                    text: "FAZER LOGIN"
+                    size_hint_y: None
+                    height: dp(50)
+                    background_normal: ''
+                    background_color: 0.2, 0.6, 1, 1
+                    color: 1, 1, 1, 1
+                    font_size: '16sp'
+                    bold: True
+                    radius: [dp(10),]
+                    on_release: root.ir_para_login()
+
+                # Mensagem de Status
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(40)
+                    padding: dp(10), 0
+
+                    Label:
+                        id: mensagem_label
+                        text: root.mensagem
+                        size_hint_y: None
+                        height: dp(30)
+                        halign: 'center'
+                        valign: 'middle'
+                        text_size: self.size
+                        font_size: '14sp'
+                        color: (0, 0.6, 0, 1) if "sucesso" in root.mensagem.lower() or "✅" in root.mensagem else (1, 0, 0, 1) if "❌" in root.mensagem or "já cadastrado" in root.mensagem.lower() else (0.3, 0.3, 0.3, 1)

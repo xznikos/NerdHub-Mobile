@@ -1,0 +1,174 @@
+# telas/detalhes_produto.kv - ATUALIZADO E MELHORADO
+<DetalhesProdutoScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.95, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+        bar_width: 4
+        bar_color: 0.2, 0.6, 0.8, 0.7
+        
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 20
+            spacing: 15
+            size_hint_y: None
+            height: self.minimum_height
+
+            # Header com botão voltar - MELHORADO
+            BoxLayout:
+                size_hint_y: None
+                height: 50
+                spacing: 10
+                canvas.before:
+                    Color:
+                        rgba: 0.07, 0.57, 0.38, 1
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [10,]
+                
+                Button:
+                    text: '← Voltar'
+                    size_hint_x: 0.3
+                    background_normal: ''
+                    background_color: 0.05, 0.45, 0.30, 1
+                    color: 1, 1, 1, 1
+                    font_size: 16
+                    bold: True
+                    on_release: root.voltar()
+                    
+                Label:
+                    text: 'Detalhes do Produto'
+                    font_size: 20
+                    bold: True
+                    size_hint_x: 0.7
+                    halign: 'center'
+                    valign: 'middle'
+                    color: 1, 1, 1, 1
+                    text_size: self.size
+
+            # Espaçamento
+            Widget:
+                size_hint_y: None
+                height: 10
+
+            # Container da imagem com borda - MELHORADO
+            FloatLayout:
+                size_hint: None, None
+                size: 320, 320
+                pos_hint: {'center_x': 0.5}
+                canvas.before:
+                    Color:
+                        rgba: 1, 1, 1, 1
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15,]
+                
+                # Imagem do produto com AsyncImage para fallback
+                AsyncImage:
+                    source: root.imagem if root.imagem else 'imagens/imagem_produtos_home/forza.jpg'
+                    size_hint: None, None
+                    size: 300, 300
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    allow_stretch: True
+                    keep_ratio: True
+
+            # Espaçamento
+            Widget:
+                size_hint_y: None
+                height: 10
+
+            # Título - MELHORADO
+            Label:
+                text: root.titulo
+                font_size: 22
+                bold: True
+                text_size: self.width - 20, None
+                size_hint_y: None
+                height: self.texture_size[1] + 10
+                halign: 'center'
+                valign: 'middle'
+                color: 0.1, 0.1, 0.1, 1
+
+            # Preço - MELHORADO
+            Label:
+                text: root.preco
+                font_size: 32
+                bold: True
+                color: 0.07, 0.57, 0.38, 1
+                halign: 'center'
+                valign: 'middle'
+                size_hint_y: None
+                height: 50
+
+            # Linha divisora
+            Widget:
+                size_hint_y: None
+                height: 2
+                canvas.before:
+                    Color:
+                        rgba: 0.8, 0.8, 0.8, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+            # Label "Descrição"
+            Label:
+                text: 'Descrição'
+                font_size: 18
+                bold: True
+                halign: 'left'
+                valign: 'middle'
+                size_hint_y: None
+                height: 30
+                color: 0.2, 0.2, 0.2, 1
+                padding: [10, 0]
+                text_size: self.width, None
+
+            # Descrição - MELHORADO
+            Label:
+                text: root.descricao
+                font_size: 16
+                text_size: self.width - 40, None
+                size_hint_y: None
+                height: self.texture_size[1] + 20
+                halign: 'left'
+                valign: 'top'
+                color: 0.3, 0.3, 0.3, 1
+                padding: [20, 10]
+
+            # Espaçamento
+            Widget:
+                size_hint_y: None
+                height: 20
+
+            # Botão adicionar ao carrinho - MELHORADO
+            Button:
+                text: '🛒 Adicionar ao Carrinho'
+                size_hint_y: None
+                height: 60
+                font_size: 18
+                bold: True
+                background_normal: ''
+                background_color: 0.2, 0.6, 0.8, 1
+                color: 1, 1, 1, 1
+                on_release: root.adicionar_ao_carrinho()
+                canvas.before:
+                    Color:
+                        rgba: self.background_color if self.state == 'normal' else (0.15, 0.50, 0.70, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [10,]
+
+            # Espaço no final
+            Widget:
+                size_hint_y: None
+                height: 30
