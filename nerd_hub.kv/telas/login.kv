@@ -162,7 +162,6 @@
 
                         TextInput:
                             id: email_input
-                            hint_text: "seu@email.com"
                             multiline: False
                             size_hint_y: None
                             height: dp(45)
@@ -174,8 +173,7 @@
                             foreground_color: 0.1, 0.1, 0.1, 1
                             cursor_color: 0.07, 0.57, 0.38, 1
                             canvas.before:
-                                Color:
-                                    rgba: 0.8, 0.8, 0.8, 1
+
                                 Line:
                                     rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
                                     width: dp(1.2)
@@ -199,7 +197,6 @@
 
                         TextInput:
                             id: senha_input
-                            hint_text: "Sua senha"
                             password: True
                             multiline: False
                             size_hint_y: None
@@ -212,8 +209,7 @@
                             foreground_color: 0.1, 0.1, 0.1, 1
                             cursor_color: 0.07, 0.57, 0.38, 1
                             canvas.before:
-                                Color:
-                                    rgba: 0.8, 0.8, 0.8, 1
+
                                 Line:
                                     rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
                                     width: dp(1.2)
@@ -240,7 +236,7 @@
                         background_color: 0, 0, 0, 0
                         color: 0.07, 0.57, 0.38, 1
                         font_size: '14sp'
-                        on_release: app.mostrar_popup("Funcionalidade em desenvolvimento!")
+                        on_release: app.mostrar_popup("Da teus pulo comédia, sou tua puta não")
 
                 # SEPARADOR
                 BoxLayout:

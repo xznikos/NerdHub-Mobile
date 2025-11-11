@@ -162,7 +162,6 @@
 
                         TextInput:
                             id: nome_input
-                            hint_text: "Seu nome completo"
                             multiline: False
                             size_hint_y: None
                             height: dp(45)
@@ -174,8 +173,7 @@
                             foreground_color: 0.1, 0.1, 0.1, 1
                             cursor_color: 0.07, 0.57, 0.38, 1
                             canvas.before:
-                                Color:
-                                    rgba: 0.8, 0.8, 0.8, 1
+                                
                                 Line:
                                     rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
                                     width: dp(1.2)
@@ -199,7 +197,6 @@
 
                         TextInput:
                             id: email_input
-                            hint_text: "seu@email.com"
                             multiline: False
                             size_hint_y: None
                             height: dp(45)
@@ -211,8 +208,7 @@
                             foreground_color: 0.1, 0.1, 0.1, 1
                             cursor_color: 0.07, 0.57, 0.38, 1
                             canvas.before:
-                                Color:
-                                    rgba: 0.8, 0.8, 0.8, 1
+
                                 Line:
                                     rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
                                     width: dp(1.2)
@@ -236,7 +232,6 @@
 
                         TextInput:
                             id: senha_input
-                            hint_text: "Crie uma senha"
                             password: True
                             multiline: False
                             size_hint_y: None
@@ -249,8 +244,6 @@
                             foreground_color: 0.1, 0.1, 0.1, 1
                             cursor_color: 0.07, 0.57, 0.38, 1
                             canvas.before:
-                                Color:
-                                    rgba: 0.8, 0.8, 0.8, 1
                                 Line:
                                     rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
                                     width: dp(1.2)
