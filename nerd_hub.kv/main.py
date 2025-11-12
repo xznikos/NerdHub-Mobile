@@ -88,7 +88,7 @@ HEADER_KV = '''
         padding: 0, dp(12)
 
         ImageButton:
-            source: 'imagens/imagens_home/carrinho.png'
+                source: 'imagens/imagens_home/carrinho.png'
             size_hint: None, None
             width: dp(25)
             height: dp(25)
