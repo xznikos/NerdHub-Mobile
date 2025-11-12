@@ -155,7 +155,7 @@ class PerfilScreen(Screen):
             font_size='20sp',
             bold=True,
             background_color=(0.9, 0.9, 0.9, 1),
-            color=(1, 1, 1, 1)
+            color=(0.1, 0.1, 0.1, 1)
         )
         
         # Botão próximo ano
@@ -192,7 +192,7 @@ class PerfilScreen(Screen):
             size_hint_x=1,
             font_size='20sp',
             bold=True,
-            color=(1, 1, 1, 1)
+            color=(0.1, 0.1, 0.1, 1)
         )
         
         # Botão próximo mês
@@ -477,8 +477,8 @@ class PerfilScreen(Screen):
             is_selected = (data_atual and date_obj.date() == data_atual.date())
             is_weekend = date_obj.weekday() in [5, 6]
             
-            # CORREÇÃO: bold deve ser True ou False, nunca None
-            btn_bold = is_today or is_selected
+            # CORREÇÃO DEFINITIVA: garantir que bold seja sempre True ou False
+            btn_bold = True if (is_today or is_selected) else False
             
             btn = Button(
                 text=str(day),
@@ -495,7 +495,7 @@ class PerfilScreen(Screen):
                     (0.5, 0.5, 0.5, 1)
                 ),
                 background_normal='',
-                bold=btn_bold  # Agora sempre True ou False
+                bold=btn_bold  # Agora SEMPRE True ou False
             )
             
             btn.bind(on_release=lambda instance, d=day: self.select_date_from_calendar(d, month, year))
