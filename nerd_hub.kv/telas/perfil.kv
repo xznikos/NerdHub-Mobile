@@ -1,0 +1,445 @@
+# telas/perfil.kv
+#:import dp kivy.metrics.dp
+
+<PerfilScreen>:
+    name: 'perfil'
+    
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.95, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 0
+        spacing: 0
+
+        Header:
+
+        # CONTEÚDO PRINCIPAL
+        ScrollView:
+            do_scroll_x: False
+            bar_width: dp(4)
+            bar_color: 0.07, 0.57, 0.38, 0.7
+            bar_inactive_color: 0.07, 0.57, 0.38, 0.3
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(30), dp(20)
+                spacing: dp(25)
+
+                # TÍTULO E SUBTÍTULO
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(80)
+                    spacing: dp(5)
+
+                    Label:
+                        text: "Meu Perfil"
+                        font_size: '24sp'
+                        bold: True
+                        color: 0.07, 0.57, 0.38, 1
+                        size_hint_y: None
+                        height: dp(35)
+                        halign: 'center'
+                        valign: 'middle'
+                        text_size: self.size
+
+                    Label:
+                        text: "Gerencie suas informações pessoais"
+                        font_size: '16sp'
+                        color: 0.4, 0.4, 0.4, 1
+                        size_hint_y: None
+                        height: dp(25)
+                        halign: 'center'
+                        valign: 'middle'
+                        text_size: self.size
+
+                # CARD DE INFORMAÇÕES PESSOAIS
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(450)
+                    padding: dp(25), dp(20)
+                    spacing: dp(15)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(16),]
+                        Color:
+                            rgba: 0.95, 0.95, 0.95, 1
+                        Line:
+                            rounded_rectangle: [self.x, self.y, self.width, self.height, dp(16)]
+                            width: dp(1.5)
+
+                    # Campo Nome Completo
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(70)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Nome completo"
+                            font_size: '14sp'
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_y: None
+                            height: dp(20)
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                        TextInput:
+                            id: full_name_input
+                            text: root.full_name
+                            multiline: False
+                            size_hint_y: None
+                            height: dp(45)
+                            font_size: '16sp'
+                            padding: [dp(12), dp(10)]
+                            background_normal: ''
+                            background_active: ''
+                            background_color: 0.98, 0.98, 0.98, 1
+                            foreground_color: 0.1, 0.1, 0.1, 1
+                            cursor_color: 0.07, 0.57, 0.38, 1
+                            on_text: root.full_name = self.text
+                            canvas.before:
+                                Line:
+                                    rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                    width: dp(1.2)
+
+                    # Campo Email
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(70)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "E-mail"
+                            font_size: '14sp'
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_y: None
+                            height: dp(20)
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                        TextInput:
+                            id: email_input
+                            text: root.email
+                            multiline: False
+                            size_hint_y: None
+                            height: dp(45)
+                            font_size: '16sp'
+                            padding: [dp(12), dp(10)]
+                            background_normal: ''
+                            background_active: ''
+                            background_color: 0.98, 0.98, 0.98, 1
+                            foreground_color: 0.1, 0.1, 0.1, 1
+                            cursor_color: 0.07, 0.57, 0.38, 1
+                            on_text: root.email = self.text
+                            canvas.before:
+                                Line:
+                                    rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                    width: dp(1.2)
+
+                    # Campo Telefone COM FORMATAÇÃO
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(70)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Telefone (opcional)"
+                            font_size: '14sp'
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_y: None
+                            height: dp(20)
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                        TextInput:
+                            id: phone_input
+                            text: root.phone
+                            multiline: False
+                            hint_text: "(00) 0 0000-0000"
+                            size_hint_y: None
+                            height: dp(45)
+                            font_size: '16sp'
+                            padding: [dp(12), dp(10)]
+                            background_normal: ''
+                            background_active: ''
+                            background_color: 0.98, 0.98, 0.98, 1
+                            foreground_color: 0.1, 0.1, 0.1, 1
+                            cursor_color: 0.07, 0.57, 0.38, 1
+                            on_text: root.on_phone_change(self, self.text)
+                            canvas.before:
+                                Line:
+                                    rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                    width: dp(1.2)
+
+                    # Campo Data de Nascimento COM FORMATAÇÃO E BOTÃO DE CALENDÁRIO
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(70)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Data de Nascimento (opcional)"
+                            font_size: '14sp'
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_y: None
+                            height: dp(20)
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            size_hint_y: None
+                            height: dp(45)
+                            spacing: dp(10)
+
+                            TextInput:
+                                id: birth_date_input
+                                text: root.birth_date
+                                multiline: False
+                                hint_text: "DD/MM/AAAA"
+                                size_hint_x: 0.8
+                                font_size: '16sp'
+                                padding: [dp(12), dp(10)]
+                                background_normal: ''
+                                background_active: ''
+                                background_color: 0.98, 0.98, 0.98, 1
+                                foreground_color: 0.1, 0.1, 0.1, 1
+                                cursor_color: 0.07, 0.57, 0.38, 1
+                                on_text: root.on_birth_date_change(self, self.text)
+                                canvas.before:
+                                    Line:
+                                        rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                        width: dp(1.2)
+
+                            Button:
+                                id: date_picker_btn
+                                text: "Data"
+                                size_hint_x: 0.2
+                                background_normal: ''
+                                background_color: 0.07, 0.57, 0.38, 1
+                                color: 1, 1, 1, 1
+                                font_size: '18sp'
+                                radius: [dp(8),]
+                                on_release: root.show_date_picker()
+
+                    # ESPAÇO EXTRA PARA RESPIRAÇÃO
+                    Widget:
+                        size_hint_y: None
+                        height: dp(20)
+
+                    # Botão Salvar Informações
+                    Button:
+                        text: "SALVAR ALTERAÇÕES"
+                        size_hint_y: None
+                        height: dp(50)
+                        background_normal: ''
+                        background_color: 0.07, 0.57, 0.38, 1
+                        color: 1, 1, 1, 1
+                        font_size: '16sp'
+                        bold: True
+                        radius: [dp(10),]
+                        on_release: root.update_personal_info()
+
+                # CARD DE ALTERAÇÃO DE SENHA
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(350)
+                    padding: dp(25), dp(20)
+                    spacing: dp(15)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(16),]
+                        Color:
+                            rgba: 0.95, 0.95, 0.95, 1
+                        Line:
+                            rounded_rectangle: [self.x, self.y, self.width, self.height, dp(16)]
+                            width: dp(1.5)
+
+                    # Campo Nova Senha
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(70)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Nova Senha"
+                            font_size: '14sp'
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_y: None
+                            height: dp(20)
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                        TextInput:
+                            id: new_password_input
+                            text: root.new_password
+                            password: not root.show_password
+                            multiline: False
+                            size_hint_y: None
+                            height: dp(45)
+                            font_size: '16sp'
+                            padding: [dp(12), dp(10)]
+                            background_normal: ''
+                            background_active: ''
+                            background_color: 0.98, 0.98, 0.98, 1
+                            foreground_color: 0.1, 0.1, 0.1, 1
+                            cursor_color: 0.07, 0.57, 0.38, 1
+                            on_text: root.new_password = self.text
+                            canvas.before:
+                                Line:
+                                    rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                    width: dp(1.2)
+
+                    # Campo Confirmar Senha
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(70)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Confirmar Nova Senha"
+                            font_size: '14sp'
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_y: None
+                            height: dp(20)
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                        TextInput:
+                            id: confirm_password_input
+                            text: root.confirm_password
+                            password: not root.show_password
+                            multiline: False
+                            size_hint_y: None
+                            height: dp(45)
+                            font_size: '16sp'
+                            padding: [dp(12), dp(10)]
+                            background_normal: ''
+                            background_active: ''
+                            background_color: 0.98, 0.98, 0.98, 1
+                            foreground_color: 0.1, 0.1, 0.1, 1
+                            cursor_color: 0.07, 0.57, 0.38, 1
+                            on_text: root.confirm_password = self.text
+                            canvas.before:
+                                Line:
+                                    rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                    width: dp(1.2)
+
+                    # Checkbox Mostrar Senha
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(40)
+                        spacing: dp(10)
+
+                        CheckBox:
+                            size_hint_x: None
+                            width: dp(30)
+                            active: root.show_password
+                            on_active: root.toggle_show_password()
+
+                        Label:
+                            text: "Mostrar senha"
+                            font_size: '14sp'
+                            color: 0.4, 0.4, 0.4, 1
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                    # ESPAÇO EXTRA PARA RESPIRAÇÃO
+                    Widget:
+                        size_hint_y: None
+                        height: dp(20)
+
+                    # Botão Alterar Senha
+                    Button:
+                        text: "ALTERAR SENHA"
+                        size_hint_y: None
+                        height: dp(50)
+                        background_normal: ''
+                        background_color: 0.2, 0.6, 0.8, 1
+                        color: 1, 1, 1, 1
+                        font_size: '16sp'
+                        bold: True
+                        radius: [dp(10),]
+                        on_release: root.change_password()
+
+                # SEPARADOR
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: dp(20)
+                    spacing: dp(10)
+
+                    Widget:
+                        canvas.before:
+                            Color:
+                                rgba: 0.8, 0.8, 0.8, 1
+                            Rectangle:
+                                pos: self.center_x - dp(40), self.center_y
+                                size: dp(80), dp(1)
+
+                    Label:
+                        text: "ou"
+                        font_size: '14sp'
+                        color: 0.6, 0.6, 0.6, 1
+                        size_hint_x: None
+                        width: dp(30)
+                        halign: 'center'
+                        valign: 'middle'
+                        text_size: self.size
+
+                    Widget:
+                        canvas.before:
+                            Color:
+                                rgba: 0.8, 0.8, 0.8, 1
+                            Rectangle:
+                                pos: self.center_x - dp(40), self.center_y
+                                size: dp(80), dp(1)
+
+                # Botão Trocar Conta
+                Button:
+                    text: "TROCAR CONTA"
+                    size_hint_y: None
+                    height: dp(50)
+                    background_normal: ''
+                    background_color: 0.8, 0.2, 0.2, 1
+                    color: 1, 1, 1, 1
+                    font_size: '16sp'
+                    bold: True
+                    radius: [dp(10),]
+                    on_release: root.switch_account()
+
+                # ESPAÇO FINAL
+                Widget:
+                    size_hint_y: None
+                    height: dp(20)

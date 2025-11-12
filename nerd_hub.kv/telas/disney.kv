@@ -1,4 +1,10 @@
+# disney.kv
 #:import dp kivy.metrics.dp
+
+
+<ImageButton@ButtonBehavior+Image>:
+    allow_stretch: True
+    keep_ratio: False
 
 <DisneyScreen>:
     canvas.before:
@@ -13,73 +19,9 @@
         padding: 0
         spacing: 0
 
-        # HEADER IGUAL AO DA HOME
-        BoxLayout:
-            size_hint_y: None
-            height: dp(60)
-            padding: dp(10), 0
-            spacing: dp(10)
-            canvas.before:
-                Color:
-                    rgba: 0.07, 0.57, 0.38, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+        Header:
 
-            # BOTÃO NERD HUB (VOLTA PARA HOME)
-            Button:
-                text: "NERD HUB"
-                size_hint_x: None
-                width: dp(120)
-                background_normal: ''
-                background_color: 0, 0, 0, 0  # Transparente
-                color: 1, 1, 1, 1
-                font_size: '18sp'
-                bold: True
-                on_release:
-                    app.root.transition.direction = "right"
-                    app.root.current = "home"
-
-            TextInput:
-                hint_text: "Buscar..."
-                multiline: False
-                background_normal: ''
-                background_active: ''
-                background_color: 1,1,1,1
-                foreground_color: 0,0,0,1
-                font_size: '14sp'
-                size_hint_x: 1.5
-                size_hint_y: None
-                height: dp(36)
-                padding: [dp(12), dp(10)]
-                radius: [dp(8),]
-                pos_hint: {'center_y': 0.5}
-
-            BoxLayout:
-                size_hint_x: None
-                width: dp(80)
-                spacing: dp(10)
-                padding: 0, dp(12)
-
-                ImageButton:
-                    source: 'nerd_hub.kv/imagens/imagens_home/carrinho.png'
-                    size_hint: None, None
-                    width: dp(25)
-                    height: dp(25)
-                    on_release:
-                        app.root.transition.direction = "left"
-                        app.root.current = "carrinho"
-
-                ImageButton:
-                    source: 'nerd_hub.kv/imagens/imagens_home/perfil.png'
-                    size_hint: None, None
-                    width: dp(25)
-                    height: dp(25)
-                    on_release:
-                        app.root.transition.direction = "left"
-                        app.root.current = "login"
-
-        # BANNER DISNEY (IGUAL AO DA HOME)
+        # BANNER DISNEY
         BoxLayout:
             size_hint_y: None
             height: dp(200)
@@ -100,7 +42,7 @@
             size_hint_y: None
             height: dp(10)
 
-        # CARROSSEL DE MARCAS (SEM LABEL)
+        # CARROSSEL DE MARCAS
         BoxLayout:
             size_hint_y: None
             height: dp(180)
@@ -139,9 +81,7 @@
                                 pos: self.pos
                                 size: self.size
                                 radius: [dp(12),]
-                        on_release:
-                            app.root.transition.direction = "left"
-                            app.root.current = "xbox"
+                        on_release: app.root.current = "xbox"
 
                 # MARVEL
                 FloatLayout:
@@ -165,9 +105,7 @@
                                 pos: self.pos
                                 size: self.size
                                 radius: [dp(12),]
-                        on_release:
-                            app.root.transition.direction = "left"
-                            app.root.current = "marvel"
+                        on_release: app.root.current = "marvel"
 
                 # PLAYSTATION
                 FloatLayout:
@@ -191,9 +129,7 @@
                                 pos: self.pos
                                 size: self.size
                                 radius: [dp(12),]
-                        on_release:
-                            app.root.transition.direction = "left"
-                            app.root.current = "playstation"
+                        on_release: app.root.current = "playstation"
 
                 # STAR WARS
                 FloatLayout:
@@ -217,9 +153,7 @@
                                 pos: self.pos
                                 size: self.size
                                 radius: [dp(12),]
-                        on_release:
-                            app.root.transition.direction = "left"
-                            app.root.current = "starwars"
+                        on_release: app.root.current = "starwars"
 
         Widget:
             size_hint_y: None

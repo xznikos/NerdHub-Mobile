@@ -148,7 +148,7 @@ class DetalhesProdutoScreen(Screen):
         # Verificação de login
         if not app.usuario_logado:
             print("❌ Usuário não logado - tentativa de adicionar ao carrinho")
-            app.mostrar_popup("Você precisa fazer login para adicionar produtos ao carrinho!")
+            app.mostrar_popup("Faça login para adicionar produtos ao carrinho!")
             
             # Redireciona para tela de login após breve delay
             Clock.schedule_once(lambda dt: self.manager.mudar_tela("login"), 0.8)

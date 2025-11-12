@@ -16,13 +16,16 @@ def criar_tabelas():
     conn = conectar()
     cur = conn.cursor()
     
-    # Tabela de usuários
+    # Tabela de usuários - ATUALIZADA COM CAMPOS ADICIONAIS
     cur.execute("""
     CREATE TABLE IF NOT EXISTS usuarios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
-        senha TEXT NOT NULL
+        senha TEXT NOT NULL,
+        telefone TEXT,
+        data_nascimento TEXT,
+        data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
     
@@ -49,6 +52,17 @@ def criar_tabelas():
                     'Produto de alta qualidade para verdadeiros nerds! Este item é perfeito para colecionadores e fãs que buscam itens exclusivos e autênticos.'""")
         conn.commit()
         print("✅ Coluna 'descricao' adicionada com sucesso!")
+    
+    # MIGRAÇÃO: Adiciona colunas de perfil se não existirem
+    try:
+        cur.execute("SELECT telefone FROM usuarios LIMIT 1")
+    except sqlite3.OperationalError:
+        print("🔄 Migrando banco: adicionando colunas de perfil...")
+        cur.execute("ALTER TABLE usuarios ADD COLUMN telefone TEXT")
+        cur.execute("ALTER TABLE usuarios ADD COLUMN data_nascimento TEXT")
+        cur.execute("ALTER TABLE usuarios ADD COLUMN data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+        conn.commit()
+        print("✅ Colunas de perfil adicionadas com sucesso!")
     
     conn.close()
     print(f"✅ Todas as tabelas criadas/verificadas em: {DB_PATH}")
@@ -142,7 +156,7 @@ def carregar_produtos_iniciais():
     conn.close()
 
 # =============================================================================
-# FUNÇÕES DE USUÁRIOS - CORRIGIDAS
+# FUNÇÕES DE USUÁRIOS - CORRIGIDAS E ATUALIZADAS
 # =============================================================================
 
 def hash_senha(senha_plain):
@@ -175,29 +189,38 @@ def cadastrar_usuario(nome, email, senha_plain):
         conn.close()
 
 def verificar_login(email, senha_plain):
-    """Verifica se o login é válido - CORRIGIDA"""
+    """Verifica se o login é válido - CORRIGIDA E TESTADA"""
     conn = conectar()
     cur = conn.cursor()
     
+    # Gera o hash da senha fornecida
     senha_hash = hash_senha(senha_plain)
     print(f"🔐 Verificando login: {email}")
+    print(f"🔐 Senha fornecida (texto): {senha_plain}")
     print(f"🔐 Hash da senha fornecida: {senha_hash}")
     
-    # CORREÇÃO: Busca direta com hash
-    cur.execute("""
-        SELECT id, nome, email, senha
-        FROM usuarios
-        WHERE email = ? AND senha = ?
-    """, (email, senha_hash))
-    
+    # PRIMEIRO: Busca o usuário apenas pelo email para debug
+    cur.execute("SELECT id, nome, email, senha FROM usuarios WHERE email = ?", (email,))
     usuario = cur.fetchone()
-    conn.close()
     
     if usuario:
-        print(f"✅ Login bem-sucedido! Usuário: {usuario[1]}")
-        return (usuario[0], usuario[1], usuario[2])
+        print(f"✅ Usuário encontrado: {usuario[1]} ({usuario[2]})")
+        print(f"🔐 Hash armazenado no banco: {usuario[3]}")
+        print(f"🔐 Hash da senha fornecida: {senha_hash}")
+        print(f"🔐 Senhas coincidem? {usuario[3] == senha_hash}")
+        
+        # Agora verifica se a senha está correta
+        if usuario[3] == senha_hash:
+            print(f"✅ Login bem-sucedido! Usuário: {usuario[1]}")
+            conn.close()
+            return (usuario[0], usuario[1], usuario[2])
+        else:
+            print("❌ Senha incorreta!")
+            conn.close()
+            return None
     else:
-        print("❌ Usuário não encontrado ou senha incorreta!")
+        print("❌ Usuário não encontrado!")
+        conn.close()
         return None
 
 def carregar_usuario_teste():
@@ -217,6 +240,8 @@ def carregar_usuario_teste():
                        (usuario_teste[0], usuario_teste[1], senha_hash))
             conn.commit()
             print("✅ Usuário de teste criado com sucesso!")
+            print(f"👤 Email: teste@email.com")
+            print(f"🔐 Senha: 123456")
         except Exception as e:
             print(f"❌ Erro ao criar usuário de teste: {e}")
     
@@ -226,19 +251,127 @@ def listar_usuarios():
     """Lista todos os usuários"""
     conn = conectar()
     cur = conn.cursor()
-    cur.execute("SELECT id, nome, email FROM usuarios")
+    cur.execute("SELECT id, nome, email, telefone, data_nascimento FROM usuarios")
     usuarios = cur.fetchall()
     conn.close()
     
     print("=== 👥 USUÁRIOS NO BANCO ===")
     for usuario in usuarios:
-        print(f"   👤 {usuario[1]} - {usuario[2]}")
+        print(f"   👤 {usuario[1]} - {usuario[2]} - Tel: {usuario[3]} - Nasc: {usuario[4]}")
     print("=============================")
     
     return usuarios
 
 # =============================================================================
-# FUNÇÕES PARA CARRINHO (NOVAS)
+# FUNÇÕES PARA PERFIL DO USUÁRIO (ATUALIZADAS E CORRIGIDAS)
+# =============================================================================
+
+def get_user_by_id(user_id):
+    """Busca usuário pelo ID com todas as informações"""
+    conn = conectar()
+    cur = conn.cursor()
+    cur.execute("SELECT id, nome, email, senha, telefone, data_nascimento FROM usuarios WHERE id = ?", (user_id,))
+    usuario = cur.fetchone()
+    conn.close()
+    
+    if usuario:
+        print(f"✅ Usuário encontrado: {usuario[1]} - Tel: {usuario[4]} - Nasc: {usuario[5]}")
+    else:
+        print(f"❌ Usuário {user_id} não encontrado")
+    
+    return usuario
+
+def update_user_profile(user_id, nome=None, email=None, telefone=None, data_nascimento=None):
+    """Atualiza informações do perfil do usuário - CORRIGIDA"""
+    conn = conectar()
+    cur = conn.cursor()
+    
+    try:
+        # DEBUG: Mostra os valores que estão sendo recebidos
+        print(f"🔄 Atualizando perfil do usuário {user_id}:")
+        print(f"   Nome: {nome}")
+        print(f"   Email: {email}")
+        print(f"   Telefone: {telefone}")
+        print(f"   Data Nascimento: {data_nascimento}")
+        
+        # Constrói a query dinamicamente baseada nos campos fornecidos
+        campos = []
+        valores = []
+        
+        if nome is not None:
+            campos.append("nome = ?")
+            valores.append(nome)
+        
+        if email is not None:
+            campos.append("email = ?")
+            valores.append(email)
+        
+        if telefone is not None:
+            campos.append("telefone = ?")
+            valores.append(telefone)
+        
+        if data_nascimento is not None:
+            campos.append("data_nascimento = ?")
+            valores.append(data_nascimento)
+        
+        if not campos:
+            print("❌ Nenhum campo para atualizar")
+            return False
+        
+        valores.append(user_id)
+        query = f"UPDATE usuarios SET {', '.join(campos)} WHERE id = ?"
+        
+        print(f"🔧 Executando query: {query}")
+        print(f"🔧 Valores: {valores}")
+        
+        cur.execute(query, valores)
+        conn.commit()
+        
+        print(f"✅ Perfil do usuário {user_id} atualizado com sucesso!")
+        print(f"   📝 Campos atualizados: {', '.join(campos)}")
+        return True
+        
+    except sqlite3.IntegrityError:
+        print(f"❌ E-mail já está em uso por outro usuário")
+        return False
+    except Exception as e:
+        print(f"❌ Erro ao atualizar perfil: {e}")
+        return False
+    finally:
+        conn.close()
+
+def update_password(user_id, new_password):
+    """Atualiza a senha do usuário - CORRIGIDA"""
+    conn = conectar()
+    cur = conn.cursor()
+    
+    try:
+        senha_hash = hash_senha(new_password)
+        print(f"🔄 Atualizando senha do usuário {user_id}")
+        print(f"🔐 Nova senha (hash): {senha_hash}")
+        
+        cur.execute("UPDATE usuarios SET senha = ? WHERE id = ?", (senha_hash, user_id))
+        conn.commit()
+        
+        print(f"✅ Senha atualizada para usuário {user_id}")
+        return True
+    except Exception as e:
+        print(f"❌ Erro ao atualizar senha: {e}")
+        return False
+    finally:
+        conn.close()
+
+def get_user_by_email(email):
+    """Busca usuário pelo email"""
+    conn = conectar()
+    cur = conn.cursor()
+    cur.execute("SELECT id, nome, email FROM usuarios WHERE email = ?", (email,))
+    usuario = cur.fetchone()
+    conn.close()
+    return usuario
+
+# =============================================================================
+# FUNÇÕES PARA CARRINHO
 # =============================================================================
 
 def adicionar_ao_carrinho_db(usuario_id, produto_id, quantidade=1):
@@ -315,7 +448,7 @@ def limpar_carrinho_usuario(usuario_id):
         conn.close()
 
 # =============================================================================
-# FUNÇÕES PARA PRODUTOS (AGORA COM BANCO DE DADOS)
+# FUNÇÕES PARA PRODUTOS
 # =============================================================================
 
 def listar_produtos():
@@ -420,6 +553,25 @@ def corrigir_caminhos_imagens():
         return False
     finally:
         conn.close()
+
+# =============================================================================
+# CLASSE DATABASE PARA COMPATIBILIDADE
+# =============================================================================
+
+class Database:
+    """Classe wrapper para compatibilidade com o código existente"""
+    
+    def get_user_by_id(self, user_id):
+        return get_user_by_id(user_id)
+    
+    def update_password(self, user_id, new_password):
+        return update_password(user_id, new_password)
+    
+    def update_user_profile(self, user_id, nome=None, email=None, telefone=None, data_nascimento=None):
+        return update_user_profile(user_id, nome, email, telefone, data_nascimento)
+    
+    def get_user_by_email(self, email):
+        return get_user_by_email(email)
 
 # =============================================================================
 # INICIALIZAÇÃO DO BANCO

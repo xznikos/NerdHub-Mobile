@@ -22,10 +22,10 @@ class LoginScreen(Screen):
         sucesso = app.fazer_login(email, senha)
         
         if sucesso:
-            self.mensagem = "✅ Login realizado com sucesso!"
+            self.mensagem = " Login realizado com sucesso!"
             self.limpar_campos()
         else:
-            self.mensagem = "❌ E-mail ou senha incorretos."
+            self.mensagem = " E-mail ou senha incorretos."
 
     def limpar_campos(self):
         self.ids.email_input.text = ""

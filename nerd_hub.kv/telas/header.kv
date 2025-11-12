@@ -1,0 +1,67 @@
+# telas/header.kv
+#:import dp kivy.metrics.dp
+
+<ImageButton@ButtonBehavior+Image>:
+    allow_stretch: True
+    keep_ratio: False
+
+<Header@BoxLayout>:
+    size_hint_y: None
+    height: dp(60)
+    padding: dp(10), 0
+    spacing: dp(10)
+    canvas.before:
+        Color:
+            rgba: 0.07, 0.57, 0.38, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    # Botão NERD HUB (volta para home)
+    Button:
+        text: "NERD HUB"
+        size_hint_x: None
+        width: dp(120)
+        background_normal: ''
+        background_color: 0, 0, 0, 0
+        color: 1, 1, 1, 1
+        font_size: '18sp'
+        bold: True
+        on_release: app.root.current = "home"
+
+    # Campo de busca
+    TextInput:
+        hint_text: "Buscar..."
+        multiline: False
+        background_normal: ''
+        background_active: ''
+        background_color: 1,1,1,1
+        foreground_color: 0,0,0,1
+        font_size: '14sp'
+        size_hint_x: 1.5
+        size_hint_y: None
+        height: dp(36)
+        padding: [dp(12), dp(10)]
+        radius: [dp(8),]
+        pos_hint: {'center_y': 0.5}
+
+    # Ícones do carrinho e perfil
+    BoxLayout:
+        size_hint_x: None
+        width: dp(80)
+        spacing: dp(10)
+        padding: 0, dp(12)
+
+        ImageButton:
+            source: 'imagens/imagens_home/carrinho.png'
+            size_hint: None, None
+            width: dp(25)
+            height: dp(25)
+            on_release: app.ir_para_carrinho()
+
+        ImageButton:
+            source: 'imagens/imagens_home/perfil.png'
+            size_hint: None, None
+            width: dp(25)
+            height: dp(25)
+            on_release: app.ir_para_perfil()

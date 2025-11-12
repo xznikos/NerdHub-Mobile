@@ -1,4 +1,4 @@
-# main.py
+# main.py - ATUALIZADO
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.core.window import Window
@@ -26,11 +26,81 @@ from paginas.home import HomeScreen
 from paginas.login import LoginScreen
 from paginas.carrinho import CarrinhoScreen
 from paginas.cadastro import CadastroScreen
-from paginas.produto_detalhes import DetalhesProdutoScreen  # ADICIONADO - Tela de detalhes do produto
+from paginas.produto_detalhes import DetalhesProdutoScreen
+from paginas.perfil import PerfilScreen
 
 # Tamanho da janela (para teste no desktop)
 Window.size = (420, 900)
 
+# HEADER COMO STRING - ADICIONADO
+HEADER_KV = '''
+#:import dp kivy.metrics.dp
+
+<ImageButton@ButtonBehavior+Image>:
+    allow_stretch: True
+    keep_ratio: False
+
+<Header@BoxLayout>:
+    size_hint_y: None
+    height: dp(60)
+    padding: dp(10), 0
+    spacing: dp(10)
+    canvas.before:
+        Color:
+            rgba: 0.07, 0.57, 0.38, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    # Botão NERD HUB (volta para home)
+    Button:
+        text: "NERD HUB"
+        size_hint_x: None
+        width: dp(120)
+        background_normal: ''
+        background_color: 0, 0, 0, 0
+        color: 1, 1, 1, 1
+        font_size: '18sp'
+        bold: True
+        on_release: app.root.current = "home"
+
+    # Campo de busca
+    TextInput:
+        hint_text: "Buscar..."
+        multiline: False
+        background_normal: ''
+        background_active: ''
+        background_color: 1,1,1,1
+        foreground_color: 0,0,0,1
+        font_size: '14sp'
+        size_hint_x: 1.5
+        size_hint_y: None
+        height: dp(36)
+        padding: [dp(12), dp(10)]
+        radius: [dp(8),]
+        pos_hint: {'center_y': 0.5}
+
+    # Ícones do carrinho e perfil
+    BoxLayout:
+        size_hint_x: None
+        width: dp(80)
+        spacing: dp(10)
+        padding: 0, dp(12)
+
+        ImageButton:
+            source: 'imagens/imagens_home/carrinho.png'
+            size_hint: None, None
+            width: dp(25)
+            height: dp(25)
+            on_release: app.ir_para_carrinho()
+
+        ImageButton:
+            source: 'imagens/imagens_home/perfil.png'
+            size_hint: None, None
+            width: dp(25)
+            height: dp(25)
+            on_release: app.ir_para_perfil()
+'''
 
 # -------------------------------
 #  GERENCIADOR DE TELAS
@@ -89,6 +159,9 @@ class NerdHubApp(App):
         # Debug: listar usuários
         listar_usuarios()
 
+        # Carregar header primeiro - CORRIGIDO
+        Builder.load_string(HEADER_KV)
+        
         # Carregar telas KV
         Builder.load_file("telas/home.kv")
         Builder.load_file("telas/login.kv")
@@ -98,8 +171,9 @@ class NerdHubApp(App):
         Builder.load_file("telas/starwars.kv")
         Builder.load_file("telas/disney.kv")
         Builder.load_file("telas/carrinho.kv")
-        Builder.load_file("telas/detalhes_produto.kv")  # ADICIONADO - Tela de detalhes
+        Builder.load_file("telas/detalhes_produto.kv")
         Builder.load_file("telas/cadastro.kv")
+        Builder.load_file("telas/perfil.kv")
 
         # Gerenciador de telas
         sm = Gerenciador()
@@ -111,10 +185,13 @@ class NerdHubApp(App):
         sm.add_widget(StarWarsScreen(name="starwars"))
         sm.add_widget(DisneyScreen(name="disney"))
         sm.add_widget(CarrinhoScreen(name="carrinho"))
-        sm.add_widget(DetalhesProdutoScreen(name="detalhes_produto"))  # ADICIONADO - Tela de detalhes
+        sm.add_widget(DetalhesProdutoScreen(name="detalhes_produto"))
         sm.add_widget(CadastroScreen(name="cadastro"))
+        sm.add_widget(PerfilScreen(name="perfil"))
 
         return sm
+
+    # ... (o resto do código permanece igual)
 
     # -------------------------------
     #  POPUP
@@ -134,7 +211,6 @@ class NerdHubApp(App):
     def fazer_login(self, email, senha):
         """Usa a função do database.py para verificar login - CORRIGIDA"""
         print(f"🔐 Tentando login: {email}")
-        print(f"🔐 Senha fornecida: {senha}")
         
         if not email or not senha:
             self.mostrar_popup("Preencha todos os campos!")
@@ -159,7 +235,6 @@ class NerdHubApp(App):
     def cadastrar_usuario(self, nome, email, senha):
         """Usa a função do database.py para cadastrar - CORRIGIDA"""
         print(f"📝 Tentando cadastrar: {nome}, {email}")
-        print(f"📝 Senha fornecida: {senha}")
         
         if not nome or not email or not senha:
             self.mostrar_popup("Preencha todos os campos!")
@@ -190,6 +265,16 @@ class NerdHubApp(App):
         else:
             self.root.mudar_tela("carrinho")
 
+    def ir_para_perfil(self):
+        """Navega para a tela de perfil com verificação de login"""
+        if not self.usuario_logado:
+            self.mostrar_popup("Faça o login para acessar seu perfil!")
+            self.root.mudar_tela("login")
+            return False
+        else:
+            self.root.mudar_tela("perfil")
+            return True
+
     def ir_para_tela_com_login(self, nome_tela):
         """Função genérica para ir para qualquer tela com verificação de login"""
         if not self.usuario_logado:
@@ -211,7 +296,7 @@ class NerdHubApp(App):
         # VERIFICAÇÃO IMEDIATA
         if not self.usuario_logado:
             print("❌ Usuário não logado - redirecionando para login")
-            self.mostrar_popup("Você precisa fazer login para adicionar produtos.")
+            self.mostrar_popup("Faça login para adicionar produtos.")
             Clock.schedule_once(lambda dt: self.root.mudar_tela("login"), 0.5)
             return
             
@@ -268,14 +353,6 @@ class NerdHubApp(App):
         
         from database import limpar_carrinho_usuario
         return limpar_carrinho_usuario(self.usuario_logado['id'])
-
-    # -------------------------------
-    #  DETALHES DO PRODUTO (COMENTADO POR ENQUANTO)
-    # -------------------------------
-    # def abrir_detalhes_produto(self, produto_id):
-    #     tela_detalhes = self.root.get_screen("detalhes_produto")
-    #     tela_detalhes.produto_id = produto_id
-    #     self.root.mudar_tela("detalhes_produto")
 
 
 if __name__ == "__main__":
